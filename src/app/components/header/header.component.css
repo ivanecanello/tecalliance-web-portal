@@ -1,0 +1,8 @@
+header {
+  position: sticky;
+  top: 0;
+}
+
+.span-padding {
+  padding: 1px 3px;
+}
