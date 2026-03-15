@@ -1,0 +1,36 @@
+module.exports = {
+  extends: [],
+  ignorePatterns: ['projects/**/*'],
+  overrides: [
+    {
+      files: ['*.ts'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@angular/recommended',
+        'plugin:@angular/template/recommended',
+      ],
+      rules: {
+        '@angular/directive-selector': [
+          'error',
+          {
+            type: 'attribute',
+            prefix: 'app',
+            style: 'camelCase',
+          },
+        ],
+        '@angular/component-selector': [
+          'error',
+          {
+            type: 'element',
+            prefix: 'app',
+            style: 'kebab-case',
+          },
+        ],
+      },
+    },
+    {
+      files: ['*.html'],
+      extends: ['plugin:@angular/template/recommended'],
+    },
+  ],
+};
