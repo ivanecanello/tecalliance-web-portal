@@ -1,0 +1,134 @@
+<div class="min-h-screen bg-gray-50">
+  <app-header></app-header>
+
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    @if (error()) {
+      <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <p class="text-red-800 text-sm">{{ error() }}</p>
+        <button
+          (click)="dismissError()"
+          class="text-red-600 text-xs mt-2 underline">
+          Dismiss
+        </button>
+      </div>
+    }
+
+    <div class="mb-8 bg-white p-6 rounded-lg shadow-sm border-t-4 border-blue-600">
+      <h2 class="text-xl font-bold text-gray-900 mb-6">Add New Task</h2>
+      <form (ngSubmit)="addTodo()" class="space-y-4">
+        <mat-form-field class="w-full">
+          <mat-label>Task description</mat-label>
+          <input
+            matInput
+            type="text"
+            [value]="newTodoTitle()"
+            (input)="newTodoTitle.set($any($event.target).value)"
+            placeholder="Enter a new task"
+            [disabled]="isLoading()"
+            maxlength="250"
+          />
+        </mat-form-field>
+        <button
+          type="submit"
+          [disabled]="!newTodoTitle() || isLoading()"
+          [class.opacity-50]="!newTodoTitle() || isLoading()"
+          class="w-full mt-0 bg-blue-600 text-white
+          font-semibold py-2.5 rounded-lg
+          flex items-center justify-center">
+          @if (isLoading()) {
+            <span class="flex items-center gap-2">
+              <mat-icon class="inline mr-2">hourglass_empty</mat-icon>
+              Saving...
+            </span>
+          } @else {
+            <span class="flex items-center gap-2">
+              <mat-icon class="inline mr-2">add_circle</mat-icon>
+              Add
+            </span>
+          }
+        </button>
+      </form>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-sm border-t-4 border-blue-600">
+      <h2 class="text-xl font-bold text-gray-900 mb-6">My Tasks</h2>
+
+      @if (isLoading() && todos().length === 0) {
+        <div class="flex justify-center py-12">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+      } @else if (todos().length === 0) {
+        <div class="text-center py-12">
+          <p class="text-gray-500 font-medium">You don't have any tasks yet</p>
+            <p class="text-gray-500 mt-4">No tasks. Create a new one!</p>
+          </div>
+        } @else {
+          <div class="space-y-3">
+            @for (todo of todos(); track todo.id) {
+              <div
+                class="flex items-center gap-4 p-4 border border-gray-200 rounded-lg"
+                [class.bg-gray-50]="todo.completed">
+                <mat-checkbox
+                  [checked]="todo.completed"
+                  (change)="toggleTodo(todo.id)"
+                  [disabled]="isLoading() || editingId() === todo.id">
+                </mat-checkbox>
+
+                @if (editingId() === todo.id) {
+                  <div class="flex-1 flex gap-2">
+                    <mat-form-field class="flex-1">
+                      <mat-label>Edit task</mat-label>
+                      <input
+                        matInput
+                        [value]="editingTitle()"
+                        (input)="onEditTitleChange($any($event.target).value)"
+                        maxlength="250"
+                        autofocus
+                      />
+                    </mat-form-field>
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="saveEdit(todo.id)"
+                      [disabled]="!editingTitle().trim()">
+                      <mat-icon>check</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      (click)="resetEdit()">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                } @else {
+                  <div class="flex-1">
+                    <p
+                      [class.line-through]="todo.completed"
+                      [class.text-gray-500]="todo.completed"
+                      class="text-gray-800">
+                      {{ todo.title }}
+                    </p>
+                  </div>
+
+                  <button
+                    mat-icon-button
+                    (click)="startEdit(todo.id, todo.title)"
+                    [disabled]="isLoading()"
+                    aria-label="Edit">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="openDeleteConfirmation(todo.id, todo.title)"
+                    [disabled]="isLoading()">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        }
+    </div>
+  </div>
+</div>

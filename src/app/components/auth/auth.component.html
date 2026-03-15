@@ -1,0 +1,71 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+  <mat-card class="w-full max-w-md shadow-lg">
+    <mat-card-header class="header justify-center flex-column text-center border-b">
+      <mat-card-title class="text-3xl font-bold">
+        My Task List
+      </mat-card-title>
+      <mat-card-subtitle class="mt-2 text-sm">
+        Secure access to your tasks
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="pt-6">
+      <form (ngSubmit)="onSubmit()">
+        <mat-form-field class="w-full">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="your.email@example.com"
+            [disabled]="isLoading()"
+            required/>
+          <mat-icon matPrefix class="text-blue-600">email</mat-icon>
+        </mat-form-field>
+
+        <button
+          type="submit"
+          class="w-full mt-0 bg-blue-600 text-white
+          font-semibold py-2.5 rounded-lg
+          flex items-center justify-center"
+          [disabled]="!email || isLoading()"
+          [class.opacity-50]="!email || isLoading()">
+
+          @if (isLoading()) {
+            <span class="flex items-center gap-2">
+              <mat-spinner diameter="20" class="mr-2"></mat-spinner>
+              Validating...
+            </span>
+          } @else {
+            <span class="flex items-center gap-2">
+              <mat-icon>login</mat-icon>
+              Continue
+            </span>
+          }
+        </button>
+      </form>
+
+      @if (error()) {
+        <div class="mt-4 mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p class="text-red-800 text-sm font-semibold">{{ error() }}</p>
+          <button (click)="dismissError()"
+                  class="text-red-600 text-xs mt-2 underline font-semibold">
+            Dismiss
+          </button>
+        </div>
+      }
+
+      <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <p class="text-sm font-semibold text-gray-900 mb-3">
+          Emails for testing:
+        </p>
+        <ul class="text-sm text-gray-700 space-y-1 ml-4">
+          <li>• Bret&#64;april.biz</li>
+          <li>• Sincere&#64;april.biz</li>
+          <li>• Rey.Padberg&#64;karina.biz</li>
+        </ul>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
