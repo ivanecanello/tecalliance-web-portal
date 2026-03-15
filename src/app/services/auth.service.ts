@@ -1,14 +1,15 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { AuthState, User } from "../models/types";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly API_URL = 'https://jsonplaceholder.typicode.com';
+  private readonly API_URL = environment.apiUrl;
 
   private authState = signal<AuthState>({
     isAuthenticated: false,
@@ -17,13 +18,11 @@ export class AuthService {
     error: null,
   });
 
-  // I expose the computed todos as signal states
-  isAuthenticated = computed(() => this.authState().isAuthenticated);
-  currentUser = computed(() => this.authState().user);
-  isLoading = computed(() => this.authState().loading);
-  error = computed(() => this.authState().error);
+  readonly isAuthenticated = computed(() => this.authState().isAuthenticated);
+  readonly currentUser = computed(() => this.authState().user);
+  readonly isLoading = computed(() => this.authState().loading);
+  readonly error = computed(() => this.authState().error);
 
-  // Adding a validation for the email format using a regular expression
   private validateEmailFormat(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);

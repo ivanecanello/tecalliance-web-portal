@@ -2,13 +2,14 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { CreateTodoRequest, Todo, TodoState, UpdateTodoRequest } from "../models/types";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
   private readonly http = inject(HttpClient);
-  private readonly API_URL = 'https://jsonplaceholder.typicode.com';
+  private readonly API_URL = environment.apiUrl;
 
   private todoState = signal<TodoState>({
     items: [],
