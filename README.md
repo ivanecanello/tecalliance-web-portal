@@ -47,6 +47,16 @@ npm start
 
 The application will be available at `http://localhost:4200`
 
+## Testing
+
+### Run Tests Once
+
+Execute the full test suite developed with Vitest:
+
+```bash
+npm test
+```
+
 ## Implemented Best Practices
 ### 1. **Modern Angular Architecture**
 ### 2. **State Management with Signals**
